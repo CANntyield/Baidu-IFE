@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript day31-33</title>
+    <script src="../source/ife31data.js"></script>
+    <style>
+    </style>
+</head>
+<body>
+    <select id="region-select">
+        <option>全部</option>
+        <option>华东</option>
+        <option>华南</option>
+        <option>华北</option>
+    </select>
+    <select id="product-select">
+        <option>全部</option>
+        <option>手机</option>
+        <option>笔记本</option>
+        <option>智能音箱</option>
+    </select>
+    
+    <div id="table-wrapper">
+        
+    </div>
+    <script>
+        var regionSelect = document.querySelector("#region-select");
+        var productSelect = document.querySelector("#product-select");
+        var tableWrapper = document.querySelector("#table-wrapper");
+        var change = function() {
+            // 渲染新的表格(根据select选项获取数据)
+            renderingTable(getData());
+        }
+        regionSelect.onchange = change;
+        productSelect.onchange = change;
+
+        function getData() {
+            var tempData = [];
+            var regionValue = regionSelect.value;
+            var productValue = productSelect.value;
+            for (var i = 0;i < sourceData.length; i++) {
+                var tempRegion = sourceData[i].region;
+                var tempProduct = sourceData[i].product;
+                if ((regionValue == "全部" || tempRegion == regionValue) 
+                    && (productValue == "全部" || tempProduct == productValue)) {
+                    tempData.push(sourceData[i]);
+                }
+            }
+            return tempData;
+        }
+
+        function renderingTable(data) {
+            // 移除已渲染的表格
+            var preTable = document.querySelector("table");
+            if (preTable) {
+                tableWrapper.removeChild(preTable);
+            }
+            // 输出表头：商品、地区、1月、2月、…… 12月
+            var temp,tempTr,tempTd;
+            var table = document.createElement('table');
+            table.border = "1";
+            table.style.borderCollapse = "collapse";
+
+            var tr = document.createElement("tr");
+            var thProduct = document.createElement("th");
+            thProduct.innerHTML = "商品";
+            var thRegion = document.createElement("th");
+            thRegion.innerHTML = "地区";
+            tr.append(thProduct);tr.append(thRegion);
+            for (var i = 1; i <= 12; i++) {
+                temp = document.createElement("th");
+                temp.innerHTML = `${i}月`;
+                tr.append(temp);
+            }
+            table.append(tr);
+            // 遍历数据,输出每一行的表格HTML内容
+            for (var i = 0; i < data.length; i++) {
+                tempTr = document.createElement('tr');
+                tempTd = document.createElement('td');
+                tempTd.innerHTML = data[i].product;
+                tempTr.append(tempTd);
+                tempTd = document.createElement('td');
+                tempTd.innerHTML = data[i].region;
+                tempTr.append(tempTd);
+                for (var j = 0; j < 12; j++) {
+                    tempTd = document.createElement('td');
+                    tempTd.innerHTML = data[i].sale[j];
+                    tempTr.append(tempTd);
+                }
+                table.append(tempTr);
+            }
+            // 把生成的HTML内容赋给table-wrapper
+            tableWrapper.append(table);
+        }
+        change();
+    </script>
+</body>
+</html>
