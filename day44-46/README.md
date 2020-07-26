@@ -1,6 +1,9 @@
 *day44-46课程地址* <http://ife.baidu.com/course/detail/id/59>  
+**本任务实现效果请打开浏览器开发者工具查看，Chrome浏览器按F12**  
+**任务完成效果浏览链接如下**  
+<https://canntyield.github.io/Baidu-IFE/day44-46/task_1.html>
 # 第四十四天到第四十六天：开一家餐厅吧（二）
-## 课程目标  
+### 课程目标  
 通过完善餐厅的功能，来学习JavaScript面向对象编程，及一些基本的设计模式  
 ### 课程描述
 #### 需求
