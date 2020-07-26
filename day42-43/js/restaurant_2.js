@@ -1,25 +1,25 @@
 // 对象的创建与继承使用ES6中的方法
 
-class Restaurant{
+class Restaurant {
     constructor(inf) {
         this.cash = inf.cash;
         this.seats = inf.seats;
         this.staff = inf.staff;
     }
     hire(Worker) {
-        if(this.staff.indexOf(Worker) === -1){
+        if (this.staff.indexOf(Worker) === -1) {
             this.staff.push(Worker);
         }
     }
     fire(Worker) {
         var index = this.staff.indexOf(Worker);
-        if(index !== -1){
+        if (index !== -1) {
             this.staff.splice(index,1);
         }
     }
 }
 
-class Worker{
+class Worker {
     constructor(name, salary) {
         this.name = name;
         this.salary = salary;
@@ -36,7 +36,7 @@ class Worker{
 
 
 
-class Cook extends Worker{
+class Cook extends Worker {
     constructor(name, salary) {
         super(name, salary);
     }
@@ -46,7 +46,7 @@ class Cook extends Worker{
     }
 }
 
-class Waiter extends Worker{
+class Waiter extends Worker {
     constructor(name, salary) {
         super(name, salary);
     }
@@ -62,8 +62,8 @@ class Waiter extends Worker{
     }
 }
 
-
-class Diners{
+ 
+class Diners {
     constructor() {}
     order() {
         console.log("点菜");
@@ -73,7 +73,7 @@ class Diners{
     }
 }
 
-class Dish{
+class Dish {
     constructor(name, cost, price) {
         this.name = name;
         this.cost = cost;

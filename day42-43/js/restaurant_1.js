@@ -7,14 +7,14 @@ function Restaurant(inf) {
 }
 Restaurant.prototype = {
     constructor: Restaurant,
-    hire: function(Worker){
-        if(this.staff.indexOf(Worker) === -1){
+    hire: function(Worker) {
+        if (this.staff.indexOf(Worker) === -1) {
             this.staff.push(Worker);
         }
     },
-    fire: function(Worker){
+    fire: function(Worker) {
         var index = this.staff.indexOf(Worker);
-        if(index !== -1){
+        if (index !== -1) {
             this.staff.splice(index,1);
         }
     }
@@ -31,7 +31,7 @@ function Worker(name, salary) {
 Worker.prototype = {
     constructor: Worker,
     workerId: 0,
-    finish: function(){
+    finish: function() {
         // 当调用finish方法时，会根据原型链往上找，找到此方法时，
         // 该this指向的是最低层的对象
         this.finishedTasks++;
@@ -52,7 +52,7 @@ function Waiter(name, salary) {
     Worker.call(this, name, salary);
 }
 Waiter.prototype = Object.create(Worker.prototype);
-Cook.prototype.constructor = Waiter;
+CoWaiterok.prototype.constructor = Waiter;
 Waiter.prototype.finish = function(parameter) {
     this.finishedTasks++;
     if (parameter instanceof Array) {
@@ -68,10 +68,10 @@ function Diners() {
 
 }
 Diners.prototype = {
-    order: function(){
+    order: function() {
         console.log("点菜");
     },
-    eat: function(){
+    eat: function() {
         console.log("吃");
     }
 }
