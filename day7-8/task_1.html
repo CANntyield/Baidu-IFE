@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>分别尝试使用Float、Position或者Flexbox来实现如下需求：</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="candong Tan">
+    <style>
+        .area{
+            margin-top: 30px;
+        }
+        section{
+            margin-top: 20px;
+            overflow: hidden;
+        }
+        #left_11{
+            float: left;
+            width: 30%;
+            height: 50px;
+            background-color: green;
+        }
+        #right_11{
+            float: left;
+            width: 70%;
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(2){
+            position: relative;
+            width: 100%;
+            height: 50px;
+        }
+        #left_12{
+            position: absolute;
+            left: 0;
+            width: 30%;
+            height: 50px;
+            background-color: green;
+        }
+        #right_12{
+            position: absolute;
+            right: 0;
+            width: 70%;
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(3){
+            display: flex;
+            flex-flow: row wrap;
+        }
+        #left_13{
+            flex:3;
+            height: 50px;
+            background-color: green;
+        }
+        #right_13{
+            flex: 7;
+            height: 50px;
+            background-color: grey;
+        }
+
+        
+        #left_21{
+            float: left;
+            width: 300px;
+            height: 50px;
+            background-color: green;
+        }
+        #right_21{
+            float: left;
+            width: calc(100% - 300px);
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(2){
+            position: relative;
+            width: 100%;
+            height: 50px;
+        }
+        #left_22{
+            position: absolute;
+            left: 0;
+            width: 300px;
+            height: 50px;
+            background-color: green;
+        }
+        #right_22{
+            margin-left: 300px;
+            width: 100%;
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(3){
+            display: flex;
+            flex-flow: row wrap;
+        }
+        #left_23{
+            width: 300px;
+            height: 50px;
+            background-color: green;
+        }
+        #right_23{
+            width: calc(100% - 300px);
+            height: 50px;
+            background-color: grey;
+        }
+
+
+        
+        #left_31{
+            float: left;
+            width: 140px;
+            height: 50px;
+            background-color: green;
+        }
+        #middle_31{
+            float: left;
+            width: calc(100% - 280px);
+            height: 50px;
+            background-color: red;
+        } 
+        #right_31{
+            float: left;
+            width: 140px;
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(2){
+            position: relative;
+            width: 100%;
+            height: 50px;
+        }
+        #left_32{
+            position: absolute;
+            left: 0;
+            width: 140px;
+            height: 50px;
+            background-color: green;
+        }
+        #middle_32{
+            margin-left: 140px;
+            margin-right: 140px;
+            height: 50px;
+            background-color: red;
+        } 
+        #right_32{
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 140px;
+            height: 50px;
+            background-color: grey;
+        }
+        section:nth-of-type(3){
+            display: flex;
+            flex-flow: row wrap;
+        }
+        #left_33{
+            width: 140px;
+            flex: 0 0 auto;
+            height: 50px;
+            background-color: green;
+        }
+        #middle_33{
+            flex: 1 1 auto;
+            height: 50px;
+            background-color: red;
+        } 
+        #right_33{
+            width: 140px;
+            flex: 0 0 auto;
+            height: 50px;
+            background-color: grey;
+        }
+
+        #middle3{
+            float: left;
+            height: 50px;
+            width: 100%;
+        }
+        #middle3 #main{
+            background-color: red;
+            height: 50px;
+            margin:0 140px;
+        }
+        #left_3{
+            float: left;
+            width: 140px;
+            height: 50px;
+            margin-left : -100%;
+            background-color: green;
+        }
+        #right_3{
+            float: left;
+            margin-left : -140px;
+            width: 140px;
+            height: 50px;
+            background-color: grey;
+        }
+    </style>
+</head>
+<body>
+    <!-- 实现一个两栏布局，左侧占30%宽度，右侧占70%宽度 -->
+    <div class="area">
+        <div>实现一个两栏布局，左侧占30%宽度，右侧占70%宽度</div>
+        <section>
+            <div id="left_11">left</div>
+            <div id="right_11">right</div>
+        </section>
+        <section>
+            <div id="left_12">left</div>
+            <div id="right_12">right</div>
+        </section>
+        <section>
+            <div id="left_13">left</div>
+            <div id="right_13">right</div>
+        </section>
+    </div>
+    <!-- 实现一个两栏布局，左侧固定宽度，右侧根据浏览器宽度进行自适应变化 -->
+    <div class="area">
+        <div>实现一个两栏布局，左侧固定宽度，右侧根据浏览器宽度进行自适应变化</div>
+        <section>
+            <div id="left_21">left</div>
+            <div id="right_21">right</div>
+        </section>
+        <section>
+            <div id="left_22">left</div>
+            <div id="right_22">right</div>
+        </section>
+        <section>
+            <div id="left_23">left</div>
+            <div id="right_23">right</div>
+        </section>
+    </div>
+    <!-- 实现一个三栏布局，左侧固定宽度，右侧固定宽度，中间部分宽度随浏览器宽度变化而自适应变化 -->
+    <div class="area">
+        <div>实现一个三栏布局，左侧固定宽度，右侧固定宽度，中间部分宽度随浏览器宽度变化而自适应变化</div>
+        <section>
+            <div id="left_31">left</div>
+            <div id="middle_31">middle</div>
+            <div id="right_31">right</div>
+        </section>
+        <section>
+            <div id="left_32">left</div>
+            <div id="middle_32">middle</div>
+            <div id="right_32">right</div>
+        </section>
+        <section>
+            <div id="left_33">left</div>
+            <div id="middle_33">middle</div>
+            <div id="right_33">right</div>
+        </section>
+    </div>
+
+    <div>margin负值法，三栏布局</div>
+    <section>
+        <div id="middle3">
+            <div id="main">middle</div>
+        </div>
+        <div id="left_3">left</div>
+        <div id="right_3">right</div>
+    </section>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #erik{
+            float: left;
+            width: 480px;
+            height: 480px;
+            background-image: url(http://ife.baidu.com/2016/static/img/erik_ce204002.jpg);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="erik"></div>
+    <script>
+        var ypos = 0;
+        var status1 = true;
+        var erik = document.querySelector("#erik");
+        var t = setInterval(function(){
+            erik.style.backgroundPosition = `0 ${ypos}px`;
+            if(status1){
+                if(ypos<16*480) ypos += 480;
+                else status1 = false;
+            }
+            else{
+                if(ypos>480) ypos -= 480;
+                else status1 = true;
+            }
+
+        },100);
+    </script>
+</body>
+</html>

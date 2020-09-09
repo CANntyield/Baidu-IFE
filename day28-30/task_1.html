@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        input{
+            width: 200px;
+            height: 25px;
+        }
+        ul{
+            margin-top: 0px;
+            padding: 0px;
+            border-width: 0px;
+            border-style: inset;
+            width: 200px;
+            list-style-type: none;
+
+        }
+        ul li{
+            padding: 1px 2px;
+        }
+        ul li:hover{
+            color: black;
+            background-color: #0000ff38;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <input id="email-input" type="text" autofocus>
+        <ul id="email-sug-wrapper" class="email-sug"></ul>
+    </div>
+    <script>
+        var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+        var postList = [];
+        var ulDom = document.querySelector("#email-sug-wrapper");
+        var inputDom = document.querySelector("#email-input");
+
+        ulDom.onclick = function(e){
+            var target = e.target;
+            var text;
+            if(target.nodeName.toLowerCase() == "li"){
+                text = target.innerHTML;
+                inputDom.value = text;
+                hiddenPost();
+            }
+        }
+
+        inputDom.oninput = function() {
+            insertUl();
+            controlPost();
+        }
+
+
+        // 监听特殊3个键的键盘事件，这个事件可能就是inputDom的输入监听，也有可能是另外一个，请自己测试后判断
+        inputDom.onkeydown = function(e) {    
+            var childNodes = ulDom.childNodes;
+            var nodeIndex = findSelectNode();
+            var len = childNodes.length;
+            if(e.code == "ArrowUp") {
+                removeStyle(childNodes[nodeIndex]);
+                if(nodeIndex != 0) {
+                    setStyle(childNodes[nodeIndex-1]);
+                } else {
+                    setStyle(childNodes[len-1]);
+                }
+            }
+            else if(e.code == "ArrowDown") {
+                removeStyle(childNodes[nodeIndex]);
+                if(nodeIndex == len-1){
+                    setStyle(childNodes[0]);
+                } else {
+                    setStyle(childNodes[nodeIndex+1]);
+                }
+            }
+            else if(e.code == "Enter") {
+                var text = childNodes[nodeIndex].innerHTML;
+                inputDom.value = text;
+                hiddenPost();
+            }
+        }
+        function getText() {
+            return inputDom.value.trim(); 
+        }
+
+        function genePost() {
+            var text = getText();
+            var flag = true;
+            var postTempList = [];
+            for(var x in postfixList){
+                var index = text.indexOf("@");
+                var textAfter;
+                // 临时用来保存所有进行拼接的提示框内容。
+                postTempList[x] = text + "@" + postfixList[x];
+                if(index != -1){
+                    textAfter = text.substring(index+1,text.length);
+                    if(postfixList[x].substr(0,textAfter.length) == textAfter){
+                        postList[x] = text.substring(0,index) + "@" + postfixList[x];
+                        flag = false;
+                    }
+                    else{
+                        delete postList[x];
+                        postTempList[x] = text.substring(0,index+1) + postfixList[x];
+                    } 
+                }
+            } 
+            if(flag) postList = postTempList;
+            return postList; 
+        }
+
+        // 获取生成提示框中的提示内容
+        // 将内容添加到email-sug-wrapper中
+        function insertUl() {
+            
+            genePost();
+            var ulChildNodes = ulDom.childNodes;
+            var len = ulChildNodes.length;
+            for(var i=0;i<len;i++){
+                ulDom.removeChild(ulChildNodes[0]);
+            }
+            for(var x in postfixList){
+                if(postList[x] != undefined){
+                    var li = document.createElement("li");
+                    var liText = document.createTextNode(postList[x]);
+                    li.appendChild(liText);
+                    ulDom.appendChild(li);
+                }
+            }
+            resetSelectStatus();
+        }
+
+        function controlPost() {
+            var text = getText();
+            if (text == "") {
+                hiddenPost();
+            } else {
+                showPost();
+            }
+        }
+
+        function hiddenPost() {
+            ulDom.style.display = "none";
+        }
+
+        function showPost() {
+            ulDom.style.display = "block";
+        }
+
+        // 重置选中状态
+        function resetSelectStatus() {
+            var childNodes = ulDom.childNodes;
+            var len = childNodes;
+            setStyle(childNodes[0]);
+            for(var i=1;i<len;i++){
+                removeStyle(childNodes[i]);
+            }
+        }
+
+        function findSelectNode(){
+            var childNodes = ulDom.childNodes;
+            var len = childNodes.length;
+            var nodeIndex;
+            for(var x=0;x<len;x++){
+                if(childNodes[x].mark == 1){
+                    nodeIndex = x;
+                    break;
+                }
+            }
+            return nodeIndex;
+        }
+
+        // 设置特殊的css选中属性
+        function setStyle(node){
+            node.style.backgroundColor = "#ff000030";
+            node.mark = 1;
+        }
+
+        // 消去选中的css属性
+        function removeStyle(node){
+            node.style.backgroundColor = "white";
+            node.mark = 0;
+            
+        }
+    </script>
+</body>
+</html>

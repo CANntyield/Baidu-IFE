@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript 37-38day</title>
+    <script src="source/ife31data.js"></script>
+</head>
+<body>
+    <div id="region-radio-wrapper"></div>
+    <div id="product-radio-wrapper"></div>
+    <button id="save">保存</button>
+    <div id="table-wrapper">
+        
+    </div>
+    <script>
+
+        var dataStorage= window.localStorage;
+        var localDataArray;
+
+        // 通过getData()返回获取到的用于表格渲染的数据
+        var tableRenderingTempData;
+
+        var regionRadioWrapper = document.querySelector("#region-radio-wrapper");
+        var productRadioWrapper = document.querySelector("#product-radio-wrapper");
+        var tableWrapper = document.querySelector("#table-wrapper");
+
+        // 第0个位置的值代表选中的数目
+        var selectRegionStatus = [0, 0, 0, 0];
+        var selectProductStatus = [0, 0, 0, 0];
+
+        var checkBoxRegionValue = {1: "华东", 2: "华南", 3: "华北"};
+        var checkBoxProductValue = {1: "手机", 2: "笔记本", 3: "智能音箱"};
+
+        function geneCheckbox(CheckBoxId, CheckBoxValue, CheckBoxSelectStatus) {
+            var boxWrapper = document.querySelector("#" + CheckBoxId);
+            // 生成全选checkbox的html，给一个自定义属性表示为全选checkbox，比如checkbox-type="all"
+            var label = document.createElement('label');
+            var checkAll = document.createElement('input');
+            var labelText = document.createTextNode('全选');
+            checkAll.checkboxType = "all";
+            checkAll.selectStatus = CheckBoxSelectStatus;
+
+            checkAll.value = "0";
+            checkAll.type = "checkbox";
+            label.append(checkAll);label.append(labelText);
+            boxWrapper.append(label);
+
+            // 遍历参数对象 {
+            //     生成各个子选项checkbox的html，给一个自定义属性表示为子选项
+            // }
+            for (var x in CheckBoxValue){
+                var tempLabel = document.createElement('label');
+                var checkItem = document.createElement('input');
+                var tempLabelText = document.createTextNode(CheckBoxValue[x]);
+                checkItem.value = x;
+                checkItem.checkboxType = "one";
+                checkItem.type = "checkbox";
+                tempLabel.append(checkItem);tempLabel.append(tempLabelText);
+                boxWrapper.append(tempLabel);
+            }
+
+            // 给容器做一个事件委托
+            boxWrapper.onchange = function(e) {
+                var target = e.target;
+                var tempNode = target;
+                if (target.nodeName.toLowerCase() === "input"){
+                    var allNode = target.parentNode.parentNode.firstChild.firstChild;
+                    var statusLen = allNode.selectStatus.length;
+                    var checkType = target.checkboxType;
+                    if (checkType === "all"){
+                        if(target.checked){
+                            while(tempNode.parentNode.nextSibling){
+                                tempNode = tempNode.parentNode.nextSibling.firstChild;
+                                tempNode.checked = true;
+                                allNode.selectStatus[0] = statusLen - 1;
+                                for(var i=1; i<statusLen; i++){
+                                    allNode.selectStatus[i] = 1;
+                                }
+                            }
+                        }
+                        else{
+                            target.checked = true;
+                        }
+                    }
+                    else{
+                        if(target.checked){
+                            // 是否考虑组件复用的问题
+                            // @打个标记:影响力组件的复用,有时间重构再考虑.
+                            allNode.selectStatus[target.value] = 1;
+                            allNode.selectStatus[0] += 1;
+
+                            // 考虑是否全部选中,决定是否勾选checkType值为all的input
+                            var flag = true;
+                            for(var i=1; i<statusLen; i++){
+                                if(allNode.selectStatus[i] === 0){
+                                    flag = false;
+                                }
+                            }
+                            if(flag){
+                                allNode.selectStatus[0] = statusLen - 1;
+                                allNode.checked = true;
+                            }
+                        }
+                        else{
+                            if(allNode.selectStatus[0] > 1){
+                                allNode.selectStatus[target.value] = 0;
+                                allNode.selectStatus[0] -= 1;
+                            }
+                            else{
+                                target.checked = true;
+                            }
+
+                            // 取消勾选全选框
+                            allNode.checked = false;
+
+
+
+                        }
+                    }
+                    tableRenderingTempData = getData()
+                    renderingTable(tableRenderingTempData);
+                }
+            }
+        }
+
+        function getData() {
+            // 遍历原始数据 {
+            //     判断是否在商品维度 或者 地区维度的选中范围内 {
+            //         添加到返回数据list中
+            //     }
+            // }
+            // 返回数据
+            
+            // 判断localStorage是否存在数据
+            var tableData;
+            var localStorageData = dataStorage.tableData;
+            if(localStorageData && JSON.parse(localStorageData).length > 0){
+                tableData = JSON.parse(localStorageData);
+            }
+            else{
+                tableData = sourceData;
+            }
+            var tempData = [];
+            for(let i=0; i<tableData.length; i++){
+                let tempItem = tableData[i];
+                for(let j=1; j<selectRegionStatus.length; j++){
+                    if(selectRegionStatus[j] === 1 && checkBoxRegionValue[`${j}`] === tempItem.region){
+                        for(let k=1; k<selectProductStatus.length; k++){
+                            if(selectProductStatus[k] === 1 && checkBoxProductValue[`${k}`] === tempItem.product){
+                                tempData.push(tempItem);
+                            }
+                        }
+                    }
+                }
+            }
+            return tempData;
+        }
+
+
+        function renderingTable(data){
+            let table1 = document.querySelector("table");
+            if(table1){
+                tableWrapper.removeChild(table1);
+            } 
+            // 输出表头：商品、地区、1月、2月、…… 12月
+            var temp,tempTr,tempTd;
+            var table = document.createElement('table');
+            var tr = document.createElement("tr");
+            var thGoods = document.createElement("th");
+            thGoods.innerHTML = "商品";
+            var thRegion = document.createElement("th");
+            thRegion.innerHTML = "地区";
+            tr.append(thGoods);tr.append(thRegion);
+            for(let i=1;i<=12;i++){
+                temp = document.createElement("th");
+                temp.innerHTML = `${i}月`;
+                tr.append(temp);
+            }
+            table.append(tr);
+            // 遍历数据 {
+            //     输出每一行的表格HTML内容
+            // }
+            for(let i=0;i<data.length;i++){
+                tempTr = document.createElement('tr');
+                tempTd = document.createElement('td');
+                tempTd.innerHTML = data[i].product;
+                tempTr.append(tempTd);
+                tempTd = document.createElement('td');
+                tempTd.innerHTML = data[i].region;
+                tempTr.append(tempTd);
+
+                for(let j=0;j<12;j++){
+                    tempTd = document.createElement('td');
+                    tempTd.innerHTML = data[i].sale[j];
+                    tempTd.onmouseover = function(){
+                        if(this.childNodes.length <= 1){
+                            tempSpan = document.createElement('span');
+                            tempSpan.innerHTML = "编辑";
+                            tempSpan.style.cssText = "color:grey;font-size:5px;vertical-align:top;";
+                            this.append(tempSpan);
+                        }
+                        
+                    }
+                    tempTd.onmouseout = function(){
+                        if(this.childNodes.length == 2){
+                            this.lastChild.remove();
+                        }
+                    }
+                    var confirm = function(node){
+                        var thisNode = this;
+                        if(node && node.nodeType === 1){
+                            thisNode =  node;
+                        }
+                        while(thisNode.previousSibling){
+                            thisNode = thisNode.previousSibling;
+                        }
+                        var inputNode = thisNode;
+                        var thisParentNode = thisNode.parentNode;
+                        var value = inputNode.value;
+                        if(isFinite(value)){
+                            // 发现数值更新了,就找到渲染表格数据的值更新
+                            // 找到修改了的节点的父节点,判断出其在tableRenderingTempData数组的第几行
+                            var row = -2;
+                            var col = 0;
+                            var tempNode = inputNode.parentNode.parentNode;
+                            while(tempNode != null){
+                                row++;
+                                tempNode = tempNode.previousSibling;
+                            }
+
+                            tempNode = inputNode.parentNode;
+                            while(tempNode != null){
+                                col++;
+                                tempNode = tempNode.nextSibling;
+                            }
+                            col = 12 - col;
+                            tableRenderingTempData[row].sale[col] = value;
+
+
+                            thisParentNode.innerHTML = value;
+                        }
+                        else{
+                            alert("请输入一个数字");
+                            inputNode.focus();
+                        }
+                    }
+                    tempTd.onclick = function(){
+                        if(this.childNodes.length == 2){
+                            var tempValue = this.firstChild.nodeValue;
+                            this.firstChild.remove();
+                            this.lastChild.remove();
+                            var tempInput = document.createElement('input');
+                            tempInput.style.width = "40px";
+                            tempInput.value = tempValue;
+                            
+
+                            var cancelOrBlur = function(e){
+                                if(!e.relatedTarget || e.relatedTarget.innerHTML !== "确认" ){
+                                    this.parentNode.innerHTML = tempValue;
+                                }
+                            }
+                            // 输入框 esc 和 enter按钮
+                            tempInput.onkeydown = function(e){
+                                var target = e.target;
+                                if(e.code === "Escape"){
+                                    target.parentNode.innerHTML = tempValue;
+                                }
+                                else if(e.code === "Enter"){
+                                    console.log(target);
+                                    confirm(target);
+                                }
+                            }
+                            // 输入框丢失焦点
+                            tempInput.onblur = cancelOrBlur;
+                            this.append(tempInput);
+                            var cancelButton = document.createElement('button');
+                            cancelButton.innerHTML = "取消";
+                            cancelButton.onclick = cancelOrBlur;
+                            var confirmButton = document.createElement('button');
+                            confirmButton.innerHTML = "确认";
+                            confirmButton.onclick = confirm;
+                            this.append(cancelButton);
+                            this.append(confirmButton);
+                            
+                            tempInput.focus();
+                            
+                        }
+                        
+                    }
+                    
+                    tempTr.append(tempTd);
+                }
+                table.append(tempTr);
+            }
+            // 当地区选择了一个,而商品选择多个时候,地区作为第一列
+            if(selectRegionStatus[0] === 1 && selectProductStatus[0] > 1){
+                var tempCol,tempFisrtNode,tempSecondNode;
+                for(let i=0;i<=data.length; i++){
+                    tempFisrtNode = table.childNodes[i].firstChild;
+                    tempSecondNode = tempFisrtNode.nextSibling;
+                    tempCol = tempFisrtNode.cloneNode(true);
+                    tempFisrtNode.remove();
+                    tempSecondNode.after(tempCol);
+                }
+            }
+            else if(selectRegionStatus[0] > 1 && selectProductStatus[0] > 1){
+                var curNode,preNode;
+                var curValue,preValue;
+                var cnt = 1;
+                for(let i=1;i<=data.length; i++){
+                    curNode = table.childNodes[i].firstChild;
+                    curValue = curNode.innerHTML;
+                    if(curValue === preValue){
+                        curNode.style.display = "none";
+                        cnt++;
+                    }
+                    else{
+                        if(preNode){
+                            preNode.rowSpan = `${cnt}`;
+                        }
+                        preNode = curNode;
+                        preValue = curValue;
+                        cnt = 1;
+                    }
+                }
+                if(cnt > 1){
+                    if(preNode){
+                        preNode.rowSpan = `${cnt}`;
+                    }
+                }
+            }
+            // 把生成的HTML内容赋给table-wrapper
+            tableWrapper.append(table);
+        }
+
+        geneCheckbox("region-radio-wrapper", checkBoxRegionValue, selectRegionStatus);
+        geneCheckbox("product-radio-wrapper", checkBoxProductValue, selectProductStatus);
+
+
+        // 37-38day新增的需求功能
+        var saveButton = document.querySelector("#save");
+        saveButton.onclick = function(){
+            var tempData = tableRenderingTempData;
+            for(let i=0; i<tempData.length; i++){
+                for(let j=0; j<sourceData.length; j++){
+                    if(tempData[i].product === sourceData[j].product 
+                        && tempData[i].region === sourceData[j].region){
+                        sourceData[j] = tempData[i];
+                    }
+                }
+            }
+            dataStorage.tableData = JSON.stringify(sourceData);
+        }
+    </script>
+</body>
+</html>

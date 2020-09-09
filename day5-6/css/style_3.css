@@ -1,0 +1,62 @@
+body{
+    margin: 0;
+}
+#wrapper{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    margin-top: 0px;
+}
+#intro{
+    width: 100%;
+    background-color: gray;
+}
+#intro h1{
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 30px;
+    text-align: left;
+    color: white;
+}
+main{
+    width: 100%;
+    font-size: 15px;
+}
+main>section{
+    border-bottom: 1px solid #d6d2d2;
+}
+main>section>h2{
+    display: inline-block;
+    margin: 0;
+    height: 140px;
+    width: 140px;
+    vertical-align: top;
+    font-size: 20px;
+    text-align: center;
+    line-height: 140px;    
+    background-color: grey;
+}
+ul{
+    display: inline-block;
+    margin: 0;
+    padding:0px;
+    vertical-align: top;
+    list-style-type: none;
+}
+ul li{
+    margin-left: 0px;
+}
+li.first-style{
+    display: inline;
+    margin-right: 15px;
+}
+li.first-style strong{
+    margin-right: 7px;
+}
+li.second-style{
+    
+}
+li.second-style strong{
+    display: block;
+    margin-bottom: 0px;
+}

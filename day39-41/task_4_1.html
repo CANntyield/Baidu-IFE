@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript 39-41day</title>
+</head>
+<body>
+    <button id="a">A</button>
+    <button id="b">B</button>
+    <button id="c">C</button>
+    <div id="cont"></div>
+    <script>
+        function parseValue() {
+            // 取到需要的值，并返回
+            return history.state;
+        }
+
+        function renderingWeb() {
+            var value = parseValue();
+            var content = document.querySelector("#cont");
+
+            content.innerHTML = value;
+        }
+        clickButton = function() {
+            var t = this.innerHTML;
+            var index = location.href.indexOf(".html");
+            var sourceUrl = location.href.substr(0,index+5);
+            history.replaceState(t,null,sourceUrl+"#"+t);
+            renderingWeb();
+        };
+
+        document.querySelector("#a").onclick = clickButton;
+        document.querySelector("#b").onclick = clickButton;
+        document.querySelector("#c").onclick = clickButton;
+
+
+        renderingWeb();
+    </script>
+</body>
+</html>

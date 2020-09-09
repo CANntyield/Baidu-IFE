@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript 39-41day</title>
+</head>
+<body>
+    <button id="a">A</button>
+    <button id="b">B</button>    
+    <button id="c">C</button>
+    
+    <button id="d">D</button>
+    <button id="e">E</button>
+    <button id="f">F</button>
+
+    <div id="contABC"></div>
+    <div id="contDEF"></div>
+    <script>
+        function parseHashValue() {
+            // 取到需要的值，并返回
+            var adValue = [];
+            var value = history.state;
+            if(value != null){
+                var index = value.indexOf('+');
+                adValue[0] = value.substring(0,index);
+                adValue[1] = value.substring(index+1,value.length);
+
+            }
+            else{
+                adValue[0] = "";
+                adValue[1] = "";
+            }
+            return adValue;
+        }
+
+        function renderingWeb() {
+            var value = parseHashValue();
+            var contentA = document.querySelector("#contABC");
+            var contentD = document.querySelector("#contDEF");
+
+            contentA.innerHTML = value[0];
+            contentD.innerHTML = value[1];
+        }
+
+        clickButton = function() {
+            var value = parseHashValue();
+
+            var stateValue;
+            var index = location.href.indexOf(".html");
+            var sourceUrl = location.href.substr(0,index+5);
+            if(this.id > "c"){
+                stateValue = value[0] + "+" + this.innerHTML;
+            }
+            else{
+                stateValue = this.innerHTML + "+" + value[1];
+            }
+            history.replaceState(stateValue,null,sourceUrl+"#"+stateValue);
+            renderingWeb();
+        };
+
+        document.querySelector("#a").onclick = clickButton;
+        document.querySelector("#b").onclick = clickButton;
+        document.querySelector("#c").onclick = clickButton;
+
+        document.querySelector("#d").onclick = clickButton;
+        document.querySelector("#e").onclick = clickButton;
+        document.querySelector("#f").onclick = clickButton;
+
+
+        renderingWeb();
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+ul{
+    list-style-type: none;
+    padding-inline-start:0px;
+}
+ul li{
+    margin-left: 0px;
+}
+li.first-style{
+    display: inline;
+    margin-right: 15px;
+}
+li.first-style strong{
+    margin-right: 7px;
+}
+li.second-style{
+    margin-bottom: 10px;
+    
+}
+li.second-style strong{
+    display: block;
+    margin-bottom: 0px;
+}

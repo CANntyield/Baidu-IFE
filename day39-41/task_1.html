@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IFE ECMAScript 39-41day</title>
+</head>
+<body>
+    <button id="a">A</button>
+    <button id="b">B</button>
+    <button id="c">C</button>
+    <div id="cont"></div>
+    <script>
+        function parseHashValue() {
+            // 取到需要的值，并返回
+            return location.hash;
+        }
+
+        function renderingWeb() {
+            var value = parseHashValue();
+            var content = document.querySelector("#cont");
+
+            content.innerHTML = value.substr(1,value.length);
+        }
+
+        clickButton = function() {
+            location.hash = this.innerHTML;
+        };
+
+        document.querySelector("#a").onclick = clickButton;
+        document.querySelector("#b").onclick = clickButton;
+        document.querySelector("#c").onclick = clickButton;
+
+        window.onhashchange = renderingWeb;
+
+        renderingWeb();
+    </script>
+</body>
+</html>

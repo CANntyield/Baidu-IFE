@@ -1,0 +1,50 @@
+body{
+    margin: 0;
+}
+#wrapper{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 650px;
+    margin-top: 0px;
+}
+#intro{
+    display: inline;
+    float:left;
+    margin-right: 20px;
+    padding: 20px;
+    width: 200px;
+    height: 100%;
+    background-color: #46b9ec;
+}
+#intro h1{
+    margin: 0 auto;
+    margin-top: 50px;
+    text-align: center;
+    color: white;
+}
+main{
+    float: left;
+}
+ul{
+    padding:0px;
+    list-style-type: none;
+}
+ul li{
+    margin-left: 0px;
+}
+li.first-style{
+    display: inline;
+    margin-right: 15px;
+}
+li.first-style strong{
+    margin-right: 7px;
+}
+li.second-style{
+    margin-bottom: 10px;
+    
+}
+li.second-style strong{
+    display: block;
+    margin-bottom: 0px;
+}

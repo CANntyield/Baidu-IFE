@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <input id="name" type="text">    
+    <button id="submit-btn">Submit</button>
+    <script>
+        var btn = document.getElementById("submit-btn");
+        var i = document.querySelector("#name");
+        btn.onclick = function(){
+            console.log(document.querySelector("#name").nodeName);
+            console.log(document.getElementById("name").nodeName);
+        }
+        i.addEventListener('keydown',function(e){
+            if(e.code == "Enter"){
+                console.log(document.querySelector("#name").value);
+            }
+            if(e.code == "Escape"){
+                i.value = "";
+            }
+        })
+    </script>
+</body>
+</html>
